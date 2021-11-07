@@ -3,9 +3,8 @@ package main
 import (
   "github.com/gorilla/mux"
   "encoding/json"
-  "math/rand"
   "net/http"
-  "log"
+  "strconv"
 )
 
 // -----
@@ -30,6 +29,15 @@ func getPosts(w http.ResponseWriter, r *http.Request) {
   json.NewEncoder(w).Encode(posts)
 }
 
+// -------
+// new id
+// -------
+var count int
+func newId() string {
+  count = count + 1
+  return strconv.Itoa(count)
+}
+
 // ------------
 // create post
 // ------------
@@ -37,12 +45,7 @@ func createPost(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
   var post Post
   _ = json.NewDecoder(r.Body).Decode(&post)
-  b := make([]byte, 16)
-  _, err := rand.Read(b)
-  if err != nil {
-    log.Fatal(err)
-  }
-  post.Id = string(b)
+  post.Id = newId()
   posts = append(posts, post)
   json.NewEncoder(w).Encode(&post)
 }
@@ -105,7 +108,7 @@ func main() {
 
   // seed a post
   posts = append(posts, Post {
-    Id: "1",
+    Id: newId(),
     Title: "My first post",
     Body: "This is the content of my first post",
   })

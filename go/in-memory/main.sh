@@ -16,7 +16,7 @@ if [ $? -eq 0 ]; then
   kill -9 $pid
 fi
 
-go run main.go &
+go build main.go && ./main &
 
 sleep 1
 

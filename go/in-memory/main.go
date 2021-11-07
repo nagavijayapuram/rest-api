@@ -32,10 +32,10 @@ func getPosts(w http.ResponseWriter, r *http.Request) {
 // -------
 // new id
 // -------
-var count int
-func newId() string {
-  count = count + 1
-  return strconv.Itoa(count)
+var _id int
+func id() string {
+  _id = _id + 1
+  return strconv.Itoa(_id)
 }
 
 // ------------
@@ -45,7 +45,7 @@ func createPost(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
   var post Post
   _ = json.NewDecoder(r.Body).Decode(&post)
-  post.Id = newId()
+  post.Id = id()
   posts = append(posts, post)
   json.NewEncoder(w).Encode(&post)
 }
@@ -108,7 +108,7 @@ func main() {
 
   // seed a post
   posts = append(posts, Post {
-    Id: newId(),
+    Id: id(),
     Title: "My first post",
     Body: "This is the content of my first post",
   })

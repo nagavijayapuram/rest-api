@@ -5,7 +5,7 @@ import (
   "net/http"
   "encoding/json"
   "math/rand"
-  "strconv"
+  "log"
 )
 
 type Post struct {
@@ -25,7 +25,13 @@ func createPost(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
   var post Post
   _ = json.NewDecoder(r.Body).Decode(&post)
-  post.Id = strconv.Itoa(rand.Intn(1000000))
+  // post.Id = strconv.Itoa(rand.Intn(1000000))
+  b := make([]byte, 16)
+  _, err := rand.Read(b)
+  if err != nil {
+    log.Fatal(err)
+  }
+  post.Id = string(b)
   posts = append(posts, post)
   json.NewEncoder(w).Encode(&post)
 }

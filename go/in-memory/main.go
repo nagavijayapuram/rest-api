@@ -5,6 +5,8 @@ import (
   "encoding/json"
   "net/http"
   "strconv"
+  "log"
+  "fmt"
 )
 
 // -----
@@ -119,5 +121,8 @@ func main() {
   router.HandleFunc("/posts/{id}", updatePost).Methods("PUT")
   router.HandleFunc("/posts/{id}", deletePost).Methods("DELETE")
 
-  http.ListenAndServe(":8000", router)
+  port := "8000"
+  fmt.Println()
+  log.Print("Listening on port ", port)
+  http.ListenAndServe(":" + port, router)
 }

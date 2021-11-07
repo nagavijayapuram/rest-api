@@ -2,25 +2,37 @@ package main
 
 import (
   "github.com/gorilla/mux"
-  "net/http"
   "encoding/json"
   "math/rand"
+  "net/http"
   "log"
 )
 
+// -----
+// Post
+// -----
 type Post struct {
   Id string `json:"id"`
   Title string `json:"title"`
   Body string `json:"body"`
 }
 
+// --------------------
+// collection of posts
+// --------------------
 var posts = make([]Post, 0)
 
+// ----------
+// get posts
+// ----------
 func getPosts(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
   json.NewEncoder(w).Encode(posts)
 }
 
+// ------------
+// create post
+// ------------
 func createPost(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
   var post Post
@@ -35,6 +47,9 @@ func createPost(w http.ResponseWriter, r *http.Request) {
   json.NewEncoder(w).Encode(&post)
 }
 
+// ---------
+// get post
+// ---------
 func getPost(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
   params := mux.Vars(r)
@@ -47,6 +62,9 @@ func getPost(w http.ResponseWriter, r *http.Request) {
   json.NewEncoder(w).Encode(&Post{})
 }
 
+// ------------
+// update post
+// ------------
 func updatePost(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
   params := mux.Vars(r)
@@ -64,6 +82,9 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
   json.NewEncoder(w).Encode(posts)
 }
 
+// ------------
+// delete post
+// ------------
 func deletePost(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
   params := mux.Vars(r)
@@ -76,13 +97,24 @@ func deletePost(w http.ResponseWriter, r *http.Request) {
   json.NewEncoder(w).Encode(posts)
 }
 
+// -----
+// main
+// -----
 func main() {
   router := mux.NewRouter()
-  posts = append(posts, Post{Id: "1", Title: "My first post", Body: "This is the content of my first post"})
+
+  // seed a post
+  posts = append(posts, Post {
+    Id: "1",
+    Title: "My first post",
+    Body: "This is the content of my first post",
+  })
+
   router.HandleFunc("/posts", getPosts).Methods("GET")
   router.HandleFunc("/posts", createPost).Methods("POST")
   router.HandleFunc("/posts/{id}", getPost).Methods("GET")
   router.HandleFunc("/posts/{id}", updatePost).Methods("PUT")
   router.HandleFunc("/posts/{id}", deletePost).Methods("DELETE")
+
   http.ListenAndServe(":8000", router)
 }

@@ -11,9 +11,8 @@ trap "/bin/rm -f main" EXIT SIGINT SIGTERM
 nc -zv localhost 8000 2>/dev/null
 
 if [ $? -eq 0 ]; then
-  pid=`ps -ef | awk '/var.*mai[n]/ {print $2}'`
-  echo -en "\n . Killing the process from previous run - "
-  kill -9 $pid
+  echo -e "\nmain is already up and running with pid `ps -ef | awk '/main$/ {print $2}'`\n"
+  exit 1
 fi
 
 go build main.go && ./main &

@@ -29,9 +29,9 @@ func getPosts(w http.ResponseWriter, r *http.Request) {
   json.NewEncoder(w).Encode(posts)
 }
 
-// -------
-// new id
-// -------
+// ---
+// id
+// ---
 var _id int
 func id() string {
   _id = _id + 1
